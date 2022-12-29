@@ -28,6 +28,7 @@ console.log(uri);
 async function run() {
   try {
     const Posts = client.db("face-media").collection("posts");
+    const Comments = client.db("face-media").collection('comments')
 
     app.post("/posts", async (req, res) => {
       const post = req.body;
@@ -37,9 +38,23 @@ async function run() {
 
     app.get('/posts', async(req, res) => {
         const query = {};
-        const posts = await Posts.find(query).toArray()
+        const options = {
+            sort: {
+               'time': -1
+            }
+        }
+        const posts = await Posts.find(query, options).toArray()
         res.send(posts)
     })
+
+    // add comment to database
+    app.post('/comments', async(req, res) => {
+        const post = req.body;
+        const result = await Comments.insertOne(post);
+        res.send(result)
+    })
+
+
   } finally {
   }
 }
