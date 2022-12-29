@@ -52,6 +52,12 @@ async function run() {
         const post = req.body;
         const result = await Comments.insertOne(post);
         res.send(result)
+    });
+
+    app.get('/comments', async(req, res) => {
+        const query = {}
+        const comments = await Comments.find(query).toArray();
+        res.send(comments)
     })
 
 
