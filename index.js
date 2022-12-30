@@ -28,7 +28,8 @@ console.log(uri);
 async function run() {
   try {
     const Posts = client.db("face-media").collection("posts");
-    const Comments = client.db("face-media").collection('comments')
+    const Comments = client.db("face-media").collection('comments');
+    const Users = client.db("face-media").collection('Users');
 
     app.post("/posts", async (req, res) => {
       const post = req.body;
@@ -58,7 +59,14 @@ async function run() {
         const query = {}
         const comments = await Comments.find(query).toArray();
         res.send(comments)
-    })
+    });
+
+    // users collection
+    app.post("/users", async (req, res) => {
+        const post = req.body;
+        const result = await Users.insertOne(post);
+        res.send(result);
+      });
 
 
   } finally {
